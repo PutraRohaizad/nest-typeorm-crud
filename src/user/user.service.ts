@@ -24,14 +24,20 @@ export class UserService {
   }
 
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const newUser = this.userRespository.create(createUserDto);
+    return this.userRespository.save(newUser);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) : Promise<User> {
+    let user = await this.findOne(id);
+    user.name = updateUserDto.name;
+    user.age = updateUserDto.age;
+
+    return this.userRespository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) : Promise<User> {
+    let user = await this.findOne(id);
+    return this.userRespository.remove(user);
   }
 }
